@@ -5,8 +5,16 @@ window.onload = function () {
   var config = {
     width: 1000,
     height: 700
-  }
-  var game = new Phaser.Game(config.width, config.height, Phaser.AUTO, 'A Wind to Shake the Stars');
+  };
+
+  var game = new Phaser.Game(config.width, config.height, Phaser.AUTO, 'stars');
+
+  game.uiState = {
+    lives: 3,
+    multiplier: 1,
+    level: 1,
+    score: 0
+  };
 
   // Game States
   game.state.add('boot', require('./states/boot'));

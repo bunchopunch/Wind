@@ -1,12 +1,12 @@
 
   'use strict';
-  function Play(newMultiplier) {}
+  function Play() {}
   Play.prototype = {
     multiplier: function(){
-      if (newMultiplier === undefined){
+      if (this.game.uiState.multiplier === undefined){
         return 1;
       } else {
-        return newMultiplier;
+        return this.game.uiState.multiplier;
       }
     },
     playerCursorKeys: null,
@@ -16,13 +16,8 @@
     goal: null,
     create: function() {
       var game = this.game;
-      var levels = [
-          [5, 3, 1],
-          [9, 5, 2, 400],
-          [12, 8, 3, 600],
-          [15, 11, 4, 800]
-        ]
-      var currentLevel = 4;
+      var difficulty = [5, 3, 1];
+      console.log(game.uiState);
 
       // Init keyboard
       this.playerCursorKeys = game.input.keyboard.createCursorKeys();
@@ -41,18 +36,18 @@
       this.goalLayer.y = 350;
 
       // Create the stars
-      for (var i = 0; i < levels[currentLevel - 1][1 - 1]; i++) {
+      for (var i = 0; i < (difficulty[0] * this.multiplier() ); i++) {
         this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'small'));
       };
-      for (var i = 0; i < levels[currentLevel - 1][2 - 1]; i++) {
+      for (var i = 0; i < difficulty[1] * this.multiplier() ; i++) {
         this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'medium'));
       };
-      for (var i = 0; i < levels[currentLevel - 1][3 - 1]; i++) {
+      for (var i = 0; i < difficulty[2] * this.multiplier() ; i++) {
         this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'large'));
       };
 
       // Create a goal object
-      this.goalLayer.add(this.goal = this.createGoal(levels[currentLevel - 1][3]));
+      this.goalLayer.add(this.goal = this.createGoal(difficulty[3]) );
 
       // Create the player ship
       this.player = this.createPlayer( this.game.world.centerX, this.game.world.centerY );
