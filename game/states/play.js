@@ -15,7 +15,7 @@
           [12, 8, 3, 600],
           [15, 11, 4, 800]
         ]
-      var currentLevel = 4;
+      var currentLevel = 1;
 
       // Init keyboard
       this.playerCursorKeys = game.input.keyboard.createCursorKeys();
@@ -35,13 +35,13 @@
 
       // Create the stars
       for (var i = 0; i < levels[currentLevel - 1][1 - 1]; i++) {
-        this.starLayer.add(this.createStar(game.world.randomX, this.randomPostion('y'), 'small'));
+        this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'small'));
       };
       for (var i = 0; i < levels[currentLevel - 1][2 - 1]; i++) {
-        this.starLayer.add(this.createStar(this.randomPostion('x'), this.randomPostion('y'), 'medium'));
+        this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'medium'));
       };
       for (var i = 0; i < levels[currentLevel - 1][3 - 1]; i++) {
-        this.starLayer.add(this.createStar(this.randomPostion('x'), this.randomPostion('y'), 'large'));
+        this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'large'));
       };
 
       // Create a goal object
@@ -81,39 +81,49 @@
 
     },
 
-    randomInRange: function(min, max){
-      var returning = Math.floor(Math.random() * (min - max)) + min;
-      return returning; 
-    },
+//    function screenWrap (sprite) {
+//      if (sprite.x < 0) {
+//          sprite.x = this.game.width;
+//      } else if (sprite.x > this.game.width) {
+//          sprite.x = 0;
+//      }
+//
+//      if (sprite.y < 0) {
+//          sprite.y = this.game.height;
+//      } else if (sprite.y > this.game.height) {
+//          sprite.y = 0;
+//      }
+//    }
 
-    randomPostion: function(axis){
+    rndLayerPos: function(axis){
       if (axis === 'x') {
-        return this.game.world.randomX - this.game.world.width
+        return this.game.world.randomX - this.game.world.width/2;
+      } else if (axis === 'y') {
+        return this.game.world.randomY - this.game.world.height/2;
       } else {
-        var hay = this.game.world.randomY;
-        return hay - this.game.world.height/2
+        return 0;
       }
     },
 
-    generateDistantX: function(minDistance){
-      if (Math.random() >= 0.5) {
-        var x1 = this.randomInRange(0, minDistance);
-        return x1
-      } else {
-        var x2 = this.randomInRange(this.game.world.centerX + minDistance, this.game.world.width);
-        return x2
-      }
-    },
-
-    generateDistantY: function(minDistance){
-      if (Math.random() >= 0.5) {
-        var y1 = this.randomInRange(0, (minDistance * 0.5));
-        return y1
-      } else {
-        var y2 = this.randomInRange(this.game.world.centerY + (minDistance * 0.5), this.game.world.height);
-        return y2
-      }
-    },
+//    generateDistantX: function(minDistance){
+//      if (Math.random() >= 0.5) {
+//        var x1 = this.game.rad.integerInRange(0, minDistance);
+//        return x1
+//      } else {
+//        var x2 = this.game.rad.integerInRange(this.game.world.centerX + minDistance, this.game.world.width);
+//        return x2
+//      }
+//    },
+//
+//    generateDistantY: function(minDistance){
+//      if (Math.random() >= 0.5) {
+//        var y1 = this.game.rad.integerInRange(0, (minDistance * 0.5));
+//        return y1
+//      } else {
+//        var y2 = this.game.rad.integerInRange(this.game.world.centerY + (minDistance * 0.5), this.game.world.height);
+//        return y2
+//      }
+//    },
 
     createStar: function(newStarX, newStarY, newStarSize){
       var starImage = 'star14';
@@ -134,7 +144,7 @@
     },
 
     createGoal: function(minDistance){
-      var newGoal = this.game.add.sprite(this.randomPostion('x'), this.randomPostion('y'), 'goal');
+      var newGoal = this.game.add.sprite(this.rndLayerPos('x'), this.rndLayerPos('y'), 'goal');
       this.game.physics.enable(newGoal, Phaser.Physics.ARCADE);
 
       newGoal.body.enable;
