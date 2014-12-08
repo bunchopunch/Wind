@@ -91,17 +91,25 @@ Menu.prototype = {
     this.titleText = this.game.add.text(this.game.world.centerX, 300, 'A Wind to Shake the Stars', style);
     this.titleText.anchor.setTo(0.5, 0.5);
 
-    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Click anywhere to play and find the planet.', { font: '16px Arial', fill: '#ffffff', align: 'center'});
+    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Find the planet. Dodge the stars.', { font: '16px Arial', fill: '#ffffff', align: 'center'});
     this.instructionsText.anchor.setTo(0.5, 0.5);
 
     this.sprite.angle = -20;
     this.game.add.tween(this.sprite).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+
+
+
+    var button = this.game.add.button(this.game.world.centerX - 198, 450, 'button', this.startButton);
+    this.titleText = this.game.add.text(this.game.world.centerX - 60, 485, 'START', { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'});
   },
-  update: function() {
-    if(this.game.input.activePointer.justPressed()) {
-      this.game.state.start('play');
-    }
-  }
+
+  startButton: function () {
+    this.game.state.start('play');
+  },
+//  update: function() {
+//    if(this.game.input.activePointer.justPressed()) {
+//    }
+//  }
 };
 
 module.exports = Menu;
@@ -192,14 +200,29 @@ module.exports = Menu;
 
     deathHandler: function(){
       var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', style);
-      this.titleText.anchor.setTo(0.5, 0.5);
+      if (this.game.uiState.lives <= 0){
+        this.titleText = this.game.add.text(this.game.world.centerX - 250, 300, 'GAME OVERED', style);
+        this.titleText = this.game.add.text(this.game.world.centerX, 400, 'YOUR SCORE: ' + this.game.uiState.score, { font: '16px Arial', fill: '#ffffff', align: 'center'});
+        this.titleText.anchor.setTo(0.5, 0.5);
+        this.player.body.angularVelocity = 100;
+      } else {
+        this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', style);
+        this.titleText.anchor.setTo(0.5, 0.5);
+        this.game.uiState.lives--;
+
+        this.timer = this.game.time.create(this.game);
+        this.timer.add(3000, this.game.state.start('play'), this);
+        this.timer.start();
+      }
     },
 
     winHandler: function(){
       var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
       this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', style);
       this.titleText.anchor.setTo(0.5, 0.5);
+      this.game.uiState.multiplier++;
+      this.game.uiState.score += 1000;
+      this.game.state.start('play');
     },
 
     screenWrap: function (sprite) {
@@ -225,26 +248,6 @@ module.exports = Menu;
         return 0;
       }
     },
-
-//    generateDistantX: function(minDistance){
-//      if (Math.random() >= 0.5) {
-//        var x1 = this.game.rad.integerInRange(0, minDistance);
-//        return x1
-//      } else {
-//        var x2 = this.game.rad.integerInRange(this.game.world.centerX + minDistance, this.game.world.width);
-//        return x2
-//      }
-//    },
-//
-//    generateDistantY: function(minDistance){
-//      if (Math.random() >= 0.5) {
-//        var y1 = this.game.rad.integerInRange(0, (minDistance * 0.5));
-//        return y1
-//      } else {
-//        var y2 = this.game.rad.integerInRange(this.game.world.centerY + (minDistance * 0.5), this.game.world.height);
-//        return y2
-//      }
-//    },
 
     createStar: function(newStarX, newStarY, newStarSize){
       var starImage = 'star14';
@@ -315,6 +318,8 @@ Preload.prototype = {
     this.load.image('star64', 'assets/star-64.png');
     this.load.image('ship', 'assets/ship.png');
     this.load.image('goal', 'assets/earth-64.png');
+    this.load.image('button', 'assets/button.png');
+    this.load.image('background', 'assets/background.png');
   },
   create: function() {
     this.asset.cropEnabled = false;

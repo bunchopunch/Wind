@@ -83,14 +83,29 @@
 
     deathHandler: function(){
       var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', style);
-      this.titleText.anchor.setTo(0.5, 0.5);
+      if (this.game.uiState.lives <= 0){
+        this.titleText = this.game.add.text(this.game.world.centerX - 250, 300, 'GAME OVERED', style);
+        this.titleText = this.game.add.text(this.game.world.centerX, 400, 'YOUR SCORE: ' + this.game.uiState.score, { font: '16px Arial', fill: '#ffffff', align: 'center'});
+        this.titleText.anchor.setTo(0.5, 0.5);
+        this.player.body.angularVelocity = 100;
+      } else {
+        this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', style);
+        this.titleText.anchor.setTo(0.5, 0.5);
+        this.game.uiState.lives--;
+
+        this.timer = this.game.time.create(this.game);
+        this.timer.add(3000, this.game.state.start('play'), this);
+        this.timer.start();
+      }
     },
 
     winHandler: function(){
       var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
       this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', style);
       this.titleText.anchor.setTo(0.5, 0.5);
+      this.game.uiState.multiplier++;
+      this.game.uiState.score += 1000;
+      this.game.state.start('play');
     },
 
     screenWrap: function (sprite) {
@@ -116,26 +131,6 @@
         return 0;
       }
     },
-
-//    generateDistantX: function(minDistance){
-//      if (Math.random() >= 0.5) {
-//        var x1 = this.game.rad.integerInRange(0, minDistance);
-//        return x1
-//      } else {
-//        var x2 = this.game.rad.integerInRange(this.game.world.centerX + minDistance, this.game.world.width);
-//        return x2
-//      }
-//    },
-//
-//    generateDistantY: function(minDistance){
-//      if (Math.random() >= 0.5) {
-//        var y1 = this.game.rad.integerInRange(0, (minDistance * 0.5));
-//        return y1
-//      } else {
-//        var y2 = this.game.rad.integerInRange(this.game.world.centerY + (minDistance * 0.5), this.game.world.height);
-//        return y2
-//      }
-//    },
 
     createStar: function(newStarX, newStarY, newStarSize){
       var starImage = 'star14';

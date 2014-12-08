@@ -14,17 +14,25 @@ Menu.prototype = {
     this.titleText = this.game.add.text(this.game.world.centerX, 300, 'A Wind to Shake the Stars', style);
     this.titleText.anchor.setTo(0.5, 0.5);
 
-    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Click anywhere to play and find the planet.', { font: '16px Arial', fill: '#ffffff', align: 'center'});
+    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Find the planet. Dodge the stars.', { font: '16px Arial', fill: '#ffffff', align: 'center'});
     this.instructionsText.anchor.setTo(0.5, 0.5);
 
     this.sprite.angle = -20;
     this.game.add.tween(this.sprite).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+
+
+
+    var button = this.game.add.button(this.game.world.centerX - 198, 450, 'button', this.startButton);
+    this.titleText = this.game.add.text(this.game.world.centerX - 60, 485, 'START', { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'});
   },
-  update: function() {
-    if(this.game.input.activePointer.justPressed()) {
-      this.game.state.start('play');
-    }
-  }
+
+  startButton: function () {
+    this.game.state.start('play');
+  },
+//  update: function() {
+//    if(this.game.input.activePointer.justPressed()) {
+//    }
+//  }
 };
 
 module.exports = Menu;

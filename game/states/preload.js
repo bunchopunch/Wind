@@ -18,6 +18,8 @@ Preload.prototype = {
     this.load.image('star64', 'assets/star-64.png');
     this.load.image('ship', 'assets/ship.png');
     this.load.image('goal', 'assets/earth-64.png');
+    this.load.image('button', 'assets/button.png');
+    this.load.image('background', 'assets/background.png');
   },
   create: function() {
     this.asset.cropEnabled = false;
