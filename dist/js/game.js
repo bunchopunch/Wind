@@ -153,11 +153,15 @@ module.exports = Menu;
     },
 
     deathHandler: function(){
-      console.log("Deaded")
+      var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', style);
+      this.titleText.anchor.setTo(0.5, 0.5);
     },
 
     winHandler: function(){
-      console.log("A winner is you!");
+      var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', style);
+      this.titleText.anchor.setTo(0.5, 0.5);
     },
 
     update: function() {
@@ -182,19 +186,19 @@ module.exports = Menu;
 
     },
 
-//    function screenWrap (sprite) {
-//      if (sprite.x < 0) {
-//          sprite.x = this.game.width;
-//      } else if (sprite.x > this.game.width) {
-//          sprite.x = 0;
-//      }
-//
-//      if (sprite.y < 0) {
-//          sprite.y = this.game.height;
-//      } else if (sprite.y > this.game.height) {
-//          sprite.y = 0;
-//      }
-//    }
+    screenWrap: function (sprite) {
+      if (sprite.x < 0) {
+          sprite.x = this.game.width;
+      } else if (sprite.x > this.game.width) {
+          sprite.x = 0;
+      }
+
+      if (sprite.y < 0) {
+          sprite.y = this.game.height;
+      } else if (sprite.y > this.game.height) {
+          sprite.y = 0;
+      }
+    },
 
     rndLayerPos: function(axis){
       if (axis === 'x') {
