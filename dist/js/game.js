@@ -77,13 +77,13 @@ Menu.prototype = {
   },
   create: function() {
     var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-    this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'yeoman');
+    this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'ship');
     this.sprite.anchor.setTo(0.5, 0.5);
 
-    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'NOT a WaterGame', style);
+    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'A Wind to Shake the Stars', style);
     this.titleText.anchor.setTo(0.5, 0.5);
 
-    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Click anywhere to play "Click The Yeoman Logo"', { font: '16px Arial', fill: '#ffffff', align: 'center'});
+    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Click anywhere to play and find the planet.', { font: '16px Arial', fill: '#ffffff', align: 'center'});
     this.instructionsText.anchor.setTo(0.5, 0.5);
 
     this.sprite.angle = -20;
@@ -101,8 +101,15 @@ module.exports = Menu;
 },{}],5:[function(require,module,exports){
 
   'use strict';
-  function Play() {}
+  function Play(newMultiplier) {}
   Play.prototype = {
+    multiplier: function(){
+      if (newMultiplier === undefined){
+        return 1;
+      } else {
+        return newMultiplier;
+      }
+    },
     playerCursorKeys: null,
     starLayer: null,
     goalLayer: null,
@@ -111,12 +118,12 @@ module.exports = Menu;
     create: function() {
       var game = this.game;
       var levels = [
-          [5, 3, 1, 200],
+          [5, 3, 1],
           [9, 5, 2, 400],
           [12, 8, 3, 600],
           [15, 11, 4, 800]
         ]
-      var currentLevel = 1;
+      var currentLevel = 4;
 
       // Init keyboard
       this.playerCursorKeys = game.input.keyboard.createCursorKeys();
@@ -152,18 +159,6 @@ module.exports = Menu;
       this.player = this.createPlayer( this.game.world.centerX, this.game.world.centerY );
     },
 
-    deathHandler: function(){
-      var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', style);
-      this.titleText.anchor.setTo(0.5, 0.5);
-    },
-
-    winHandler: function(){
-      var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', style);
-      this.titleText.anchor.setTo(0.5, 0.5);
-    },
-
     update: function() {
       this.game.physics.arcade.collide(this.player, this.starLayer, this.deathHandler, null, this);
       this.game.physics.arcade.collide(this.player, this.goal, this.winHandler, null, this);
@@ -182,8 +177,26 @@ module.exports = Menu;
         this.player.body.angularVelocity = 0;
       }
 
-      this.game.camera.focusOnXY(this.player.x, this.player.y + this.player.height - this.camera.view.halfHeight);
+      this.screenWrap(this.player);
 
+        this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON)
+
+//      this.game.camera.focusOnXY(this.player.x, this.player.y + this.player.height - this.camera.view.halfHeight);
+
+    },
+
+    // COLLISION HANDLERS
+
+    deathHandler: function(){
+      var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', style);
+      this.titleText.anchor.setTo(0.5, 0.5);
+    },
+
+    winHandler: function(){
+      var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', style);
+      this.titleText.anchor.setTo(0.5, 0.5);
     },
 
     screenWrap: function (sprite) {

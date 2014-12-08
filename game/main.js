@@ -6,7 +6,7 @@ window.onload = function () {
     width: 1000,
     height: 700
   }
-  var game = new Phaser.Game(config.width, config.height, Phaser.AUTO, 'watergame');
+  var game = new Phaser.Game(config.width, config.height, Phaser.AUTO, 'A Wind to Shake the Stars');
 
   // Game States
   game.state.add('boot', require('./states/boot'));
