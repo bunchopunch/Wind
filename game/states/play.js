@@ -45,23 +45,61 @@
     },
 
     update: function() {
+
+      var velocityFunction = function(that, rotateTo){
+        console.log(that);
+        that.game.physics.arcade.velocityFromAngle(rotateTo, 300, that.body.velocity)
+      };      
+
+
+//      this.levelObjects.setAll('body.velocity.x', 0);
+//      this.levelObjects.setAll('body.velocity.y', 0);
+//      this.levelObjects.setAll('body.angularVelocity', 0);
+
       if (this.playerCursorKeys.up.isDown) {
+
+//        this.levelObjects.accelerationFromRotation(this.levelObjects.rotation, 200);
         // we need to rotate and move the world here.
 //        game.physics.arcade.accelerationFormRotation(sprite.rotation, 200, spr)
+
+//          this.levelObjects.setAll('body.velocity.x', 200);
+//          this.levelObjects.setAll('body.angularVelocity', 200);
+
+        var rotateTo = this.levelObjects.rotation;
+        var that = this
+
+        this.game.physics.arcade.accelerationFromRotation(this.player.rotation, 300, this.player.body.acceleration);
+//        this.player(velocityFunction, 'body', false, that, rotateTo);
+      } else {
+        this.player.body.acceleration.set(0)
       }
 
       if (this.playerCursorKeys.left.isDown) {
         // just world rotation
 //        this.game.world.rotation -= 0.05;
-        this.levelObjects.rotation -= 0.05;
+//        this.levelObjects.setAll('body.angle', this.levelObjects.rotation);
+
+//        this.player.rotation -= 0.05;
+          this.player.body.angularVelocity = -300;
+      } else {
+//        this.player.body.angularVelocity = 0;
       }
 
       if (this.playerCursorKeys.right.isDown) {
-        this.levelObjects.rotation += 0.05;
+        this.player.rotation += 0.05;
+//        this.levelObjects.setAll('body.angle', this.levelObjects.rotation);
+
+          this.player.body.angularVelocity = 300;
+      } else {
+        this.player.body.angularVelocity = 0;
       }
 
-      // Less than 3 hours left. Maybe no back key support.
+//      this.levelObjects.setAll('body.velocity.x', 0);
+//      this.levelObjects.setAll('body.velocity.y', 0);
 
+
+      // Less than 3 hours left. Maybe no back key support.
+      this.game.camera.focusOnXY(this.player.x, this.player.y + this.player.height - this.camera.view.halfHeight);
 
     },
     // HELPER THINGS
@@ -75,19 +113,29 @@
         return this.game.world.randomX - this.game.world.width
       } else {
         var hay = this.game.world.randomY;
-        console.log(hay)
         return hay - this.game.world.height/2
       }
     },
 
     createStar: function(newStarX, newStarY, newStarSize){
+//        this.levelObjects.add(this.game.add.sprite(newStarX, newStarY, 'star64') );
+      var starImage = 'star14';
       if(newStarSize === 'small') {
-        this.levelObjects.add(this.game.add.sprite(newStarX, newStarY, 'star14') );
+        starImage = 'star14';
       } else if (newStarSize === 'medium') {
-        this.levelObjects.add(this.game.add.sprite(newStarX, newStarY, 'star32') );
+        starImage = 'star32';
       } else if (newStarSize === 'large') {
-        this.levelObjects.add(this.game.add.sprite(newStarX, newStarY, 'star64') );
+        starImage = 'star64';
       }
+      var newStar = this.game.add.sprite(newStarX, newStarY, starImage)
+      this.game.physics.enable(newStar, Phaser.Physics.ARCADE);
+
+      newStar.body.enable;
+
+//      this.game.physics.arcade.velocityFromAngle(this.levelObjects.angle, 300)
+//      newStar.body.velocity.x = 200;
+      this.levelObjects.add(newStar);
+
     },
 
     generateDistantX: function(minDistance){
@@ -113,13 +161,15 @@
     createGoal: function(minDistance){
 //        minDistance = minDistance/2;
 //        var goal = this.game.add.sprite(this.generateDistantX(minDistance), this.generateDistantY(minDistance), 'goal');
-        var goal = this.game.add.sprite(this.randomPostion('x'), this.randomPostion('y'), 'goal');
-        this.levelObjects.add(goal);
+      var goal = this.game.add.sprite(this.randomPostion('x'), this.randomPostion('y'), 'goal');
+      this.game.physics.enable(goal, Phaser.Physics.ARCADE);
+      this.levelObjects.add(goal);
     },
 
     createPlayer: function(newPlayerX, newPlayerY){
       this.player = this.game.add.sprite(newPlayerX, newPlayerY, 'ship');
       this.player.anchor.set(0.5);
+      this.game.physics.enable(this.player, Phaser.Physics.ARCADE);
     },
     clickListener: function() {
       this.game.state.start('gameover');
