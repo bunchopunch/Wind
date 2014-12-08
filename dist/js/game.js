@@ -145,61 +145,30 @@ module.exports = Menu;
 
     },
 
+    collisionH: function(){
+
+ //     alert('congratz, you!');
+
+    },
+
     update: function() {
-
-      var velocityFunction = function(that, rotateTo){
-        console.log(that);
-        that.game.physics.arcade.velocityFromAngle(rotateTo, 300, that.body.velocity)
-      };      
-
-
-//      this.levelObjects.setAll('body.velocity.x', 0);
-//      this.levelObjects.setAll('body.velocity.y', 0);
-//      this.levelObjects.setAll('body.angularVelocity', 0);
+      this.game.physics.arcade.collide(this.player, this.levelObjects, this.collisionH());
 
       if (this.playerCursorKeys.up.isDown) {
-
-//        this.levelObjects.accelerationFromRotation(this.levelObjects.rotation, 200);
-        // we need to rotate and move the world here.
-//        game.physics.arcade.accelerationFormRotation(sprite.rotation, 200, spr)
-
-//          this.levelObjects.setAll('body.velocity.x', 200);
-//          this.levelObjects.setAll('body.angularVelocity', 200);
-
-        var rotateTo = this.levelObjects.rotation;
-        var that = this
-
-        this.game.physics.arcade.accelerationFromRotation(this.player.rotation, 300, this.player.body.acceleration);
-//        this.player(velocityFunction, 'body', false, that, rotateTo);
+        this.game.physics.arcade.accelerationFromRotation(this.player.rotation, 200, this.player.body.acceleration);
       } else {
         this.player.body.acceleration.set(0)
       }
 
       if (this.playerCursorKeys.left.isDown) {
-        // just world rotation
-//        this.game.world.rotation -= 0.05;
-//        this.levelObjects.setAll('body.angle', this.levelObjects.rotation);
-
-//        this.player.rotation -= 0.05;
-          this.player.body.angularVelocity = -300;
-      } else {
-//        this.player.body.angularVelocity = 0;
-      }
-
-      if (this.playerCursorKeys.right.isDown) {
-        this.player.rotation += 0.05;
-//        this.levelObjects.setAll('body.angle', this.levelObjects.rotation);
-
-          this.player.body.angularVelocity = 300;
+          this.player.body.angularVelocity = -200;
+      } else if (this.playerCursorKeys.right.isDown) {
+//        this.player.rotation += 0.05;
+          this.player.body.angularVelocity = 200;
       } else {
         this.player.body.angularVelocity = 0;
       }
 
-//      this.levelObjects.setAll('body.velocity.x', 0);
-//      this.levelObjects.setAll('body.velocity.y', 0);
-
-
-      // Less than 3 hours left. Maybe no back key support.
       this.game.camera.focusOnXY(this.player.x, this.player.y + this.player.height - this.camera.view.halfHeight);
 
     },
@@ -270,6 +239,8 @@ module.exports = Menu;
     createPlayer: function(newPlayerX, newPlayerY){
       this.player = this.game.add.sprite(newPlayerX, newPlayerY, 'ship');
       this.player.anchor.set(0.5);
+      this.player.angle = 1.5 * Math.PI;
+      this.player.rotation = 0;
       this.game.physics.enable(this.player, Phaser.Physics.ARCADE);
     },
     clickListener: function() {
