@@ -8,6 +8,11 @@ Play.prototype = {
       return this.game.uiState.multiplier;
     }
   },
+  textStyles: {
+    header: { font: '65px Arial', fill: '#ffffff', align: 'center'},
+    subheader: { font: '24px Arial', fill: '#ffffff', align: 'center'},
+    button: { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'}
+  },
   playerCursorKeys: null,
   starLayer: null,
   goalLayer: null,
@@ -94,31 +99,48 @@ Play.prototype = {
 
   // COLLISION HANDLERS
 
+  restart: function() {
+    this.game.state.start('play');
+  },
+
+  hardRestart: function() {
+    this.game.uiState.lives = 3;
+    this.game.uiState.multiplier = 1;
+    this.game.uiState.level = 1;
+    this.game.uiState.score = 0;
+    this.game.state.start('play');
+  },
+
   deathHandler: function(){
-    var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+    // Game Over
     if (this.game.uiState.lives <= 0){
-      this.titleText = this.game.add.text(this.game.world.centerX - 250, 300, 'GAME OVERED', style);
-      this.titleText = this.game.add.text(this.game.world.centerX, 400, 'YOUR SCORE: ' + this.game.uiState.score, { font: '16px Arial', fill: '#ffffff', align: 'center'});
+      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'GAME OVERED', this.textStyles.header);
+      this.scoreText = this.game.add.text(this.game.world.centerX, 370, 'YOUR SCORE: ' + this.game.uiState.score, this.textStyles.subheader);
+      this.restartButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.hardRestart, this);
+      this.buttonText = this.game.add.text(this.game.world.centerX, 450, 'RESTART', this.textStyles.button);
+
       this.titleText.anchor.setTo(0.5, 0.5);
-      this.player.body.angularVelocity = 100;
+      this.scoreText.anchor.setTo(0.5, 0.5);
+      this.restartButton.anchor.setTo(0.5, 0.5);
+      this.buttonText.anchor.setTo(0.5, 0.5);
+
+
+    // Lost a level
     } else {
-      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', style);
+      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', this.textStyles.header);
       this.titleText.anchor.setTo(0.5, 0.5);
       this.game.uiState.lives--;
-
-      this.timer = this.game.time.create(this.game);
-      this.timer.add(3000, this.game.state.start('play'), this);
-      this.timer.start();
+      this.game.time.events.add(Phaser.Timer.SECOND * 2, this.restart, this);
     }
   },
 
+  // Won a level
   winHandler: function(){
-    var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', style);
+    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', this.textStyles.header);
     this.titleText.anchor.setTo(0.5, 0.5);
     this.game.uiState.multiplier++;
     this.game.uiState.score += 1000;
-    this.game.state.start('play');
+    this.game.time.events.add(Phaser.Timer.SECOND * 3, this.restart, this);
   },
 
   // OTHER EVENT HANDLERS
@@ -147,7 +169,7 @@ Play.prototype = {
       if (randomPos <= this.game.world.width/2 * -1 + buffer){
         randomPos = this.game.world.width/2 * -1 + 0;
       } else if (randomPos >= this.game.world.width/2 - buffer) {
-        randomPos = this.game.world.width/2 * -1 + buffer;      
+        randomPos = this.game.world.width/2 * -1 + buffer;
       }
 
     } else if (axis === 'y') {
@@ -156,7 +178,7 @@ Play.prototype = {
       if (randomPos <= this.game.world.height/2 * -1 + buffer){
         randomPos = this.game.world.height/2 * -1 + 0;
       } else if (randomPos >= this.game.world.height/2 - buffer) {
-        randomPos = this.game.world.height/2 * -1 + buffer;      
+        randomPos = this.game.world.height/2 * -1 + buffer;
       }
 
     } else {

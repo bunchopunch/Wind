@@ -12,7 +12,7 @@ Preload.prototype = {
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
-    this.load.image('yeoman', 'assets/yeoman-logo.png');
+    this.load.image('logo', 'assets/logo.png');
     this.load.image('star14', 'assets/star-14.png');
     this.load.image('star32', 'assets/star-32.png');
     this.load.image('star64', 'assets/star-64.png');

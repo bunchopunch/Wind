@@ -96,21 +96,24 @@ Menu.prototype = {
     }
 
     // Text styles
-    var titleStyle = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-    var helpStyle = { font: '24px Arial', fill: '#ffffff', align: 'center'};
+    var headerStyle = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+    var subheaderStyle = { font: '24px Arial', fill: '#ffffff', align: 'center'};
     var buttonStyle = { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'};
 
     // Build the main UI elements
-    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'A Wind to Shake the Stars', titleStyle);
-    this.titleText.anchor.setTo(0.5, 0.5);
-    this.instructionsText = this.game.add.text(this.game.world.centerX, 395, 'Find the planet. Dodge the stars.', helpStyle);
-    this.instructionsText.anchor.setTo(0.5, 0.5);
+//    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'A Wind to Shake the Stars', headerStyle);
+//    this.titleText.anchor.setTo(0.5, 0.5);
+    this.logo = this.game.add.sprite(this.game.world.centerX, 300, 'logo');
+    this.instructionsText = this.game.add.text(this.game.world.centerX, 410, 'Find the planet. Dodge the stars.', subheaderStyle);
     this.button = this.game.add.button(this.game.world.centerX - 198, 450, 'button', this.startButton, this);
     this.buttonText = this.game.add.text(this.game.world.centerX - 60, 485, 'START', buttonStyle);
 
+    this.logo.anchor.setTo(0.5, 0.5);
+    this.instructionsText.anchor.setTo(0.5, 0.5);
+
     // Create a layer for the UI
     this.uiLayer = this.game.add.group();
-    this.uiLayer.add(this.titleText);
+    this.uiLayer.add(this.logo);
     this.uiLayer.add(this.instructionsText);
     this.uiLayer.add(this.button);
     this.uiLayer.add(this.buttonText);
@@ -144,7 +147,7 @@ Menu.prototype = {
   createNebula: function(){
     var newNebula = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'nebula' + this.game.rnd.integerInRange(1, 3));
     this.game.physics.enable(newNebula, Phaser.Physics.ARCADE);
-    newNebula.alpha = 0.5;
+    newNebula.alpha = 0.3;
     newNebula.body.enable;
     newNebula.body.angularVelocity = this.game.rnd.integerInRange(-2, 2);
 
@@ -164,6 +167,11 @@ Play.prototype = {
     } else {
       return this.game.uiState.multiplier;
     }
+  },
+  textStyles: {
+    header: { font: '65px Arial', fill: '#ffffff', align: 'center'},
+    subheader: { font: '24px Arial', fill: '#ffffff', align: 'center'},
+    button: { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'}
   },
   playerCursorKeys: null,
   starLayer: null,
@@ -251,31 +259,48 @@ Play.prototype = {
 
   // COLLISION HANDLERS
 
+  restart: function() {
+    this.game.state.start('play');
+  },
+
+  hardRestart: function() {
+    this.game.uiState.lives = 3;
+    this.game.uiState.multiplier = 1;
+    this.game.uiState.level = 1;
+    this.game.uiState.score = 0;
+    this.game.state.start('play');
+  },
+
   deathHandler: function(){
-    var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+    // Game Over
     if (this.game.uiState.lives <= 0){
-      this.titleText = this.game.add.text(this.game.world.centerX - 250, 300, 'GAME OVERED', style);
-      this.titleText = this.game.add.text(this.game.world.centerX, 400, 'YOUR SCORE: ' + this.game.uiState.score, { font: '16px Arial', fill: '#ffffff', align: 'center'});
+      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'GAME OVERED', this.textStyles.header);
+      this.scoreText = this.game.add.text(this.game.world.centerX, 370, 'YOUR SCORE: ' + this.game.uiState.score, this.textStyles.subheader);
+      this.restartButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.hardRestart, this);
+      this.buttonText = this.game.add.text(this.game.world.centerX, 450, 'RESTART', this.textStyles.button);
+
       this.titleText.anchor.setTo(0.5, 0.5);
-      this.player.body.angularVelocity = 100;
+      this.scoreText.anchor.setTo(0.5, 0.5);
+      this.restartButton.anchor.setTo(0.5, 0.5);
+      this.buttonText.anchor.setTo(0.5, 0.5);
+
+
+    // Lost a level
     } else {
-      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', style);
+      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', this.textStyles.header);
       this.titleText.anchor.setTo(0.5, 0.5);
       this.game.uiState.lives--;
-
-      this.timer = this.game.time.create(this.game);
-      this.timer.add(3000, this.game.state.start('play'), this);
-      this.timer.start();
+      this.game.time.events.add(Phaser.Timer.SECOND * 2, this.restart, this);
     }
   },
 
+  // Won a level
   winHandler: function(){
-    var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', style);
+    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', this.textStyles.header);
     this.titleText.anchor.setTo(0.5, 0.5);
     this.game.uiState.multiplier++;
     this.game.uiState.score += 1000;
-    this.game.state.start('play');
+    this.game.time.events.add(Phaser.Timer.SECOND * 3, this.restart, this);
   },
 
   // OTHER EVENT HANDLERS
@@ -304,7 +329,7 @@ Play.prototype = {
       if (randomPos <= this.game.world.width/2 * -1 + buffer){
         randomPos = this.game.world.width/2 * -1 + 0;
       } else if (randomPos >= this.game.world.width/2 - buffer) {
-        randomPos = this.game.world.width/2 * -1 + buffer;      
+        randomPos = this.game.world.width/2 * -1 + buffer;
       }
 
     } else if (axis === 'y') {
@@ -313,7 +338,7 @@ Play.prototype = {
       if (randomPos <= this.game.world.height/2 * -1 + buffer){
         randomPos = this.game.world.height/2 * -1 + 0;
       } else if (randomPos >= this.game.world.height/2 - buffer) {
-        randomPos = this.game.world.height/2 * -1 + buffer;      
+        randomPos = this.game.world.height/2 * -1 + buffer;
       }
 
     } else {
@@ -391,7 +416,7 @@ Preload.prototype = {
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
-    this.load.image('yeoman', 'assets/yeoman-logo.png');
+    this.load.image('logo', 'assets/logo.png');
     this.load.image('star14', 'assets/star-14.png');
     this.load.image('star32', 'assets/star-32.png');
     this.load.image('star64', 'assets/star-64.png');
