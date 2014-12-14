@@ -1,7 +1,6 @@
-'use strict';
-
 //global variables
 window.onload = function () {
+  'use strict';
   var config = {
     width: 1000,
     height: 700
@@ -22,7 +21,6 @@ window.onload = function () {
   game.state.add('menu', require('./states/menu'));
   game.state.add('play', require('./states/play'));
   game.state.add('preload', require('./states/preload'));
-  
 
   game.state.start('boot');
 };

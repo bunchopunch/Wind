@@ -1,8 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
-
 //global variables
 window.onload = function () {
+  'use strict';
   var config = {
     width: 1000,
     height: 700
@@ -23,7 +22,6 @@ window.onload = function () {
   game.state.add('menu', require('./states/menu'));
   game.state.add('play', require('./states/play'));
   game.state.add('preload', require('./states/preload'));
-  
 
   game.state.start('boot');
 };
@@ -148,30 +146,30 @@ Play.prototype = {
   player: null,
   goal: null,
   create: function() {
-    var game = this.game;
-    var i = 0;
-    var difficulty = [5, 3, 1];
-    game.uiState.menu = false;
-    console.log(game.uiState);
+    var game = this.game,
+    i = 0,
+    difficulty = [5, 3, 1];
 
-    this.background = this.game.add.tileSprite(0, 0, 1000, 750, 'background');
+    game.uiState.menu = false;
+
+    this.background = game.add.tileSprite(0, 0, 1000, 750, 'background');
 
     // Create a layer for the Background
-    this.backgroundLayer = this.game.add.group();
+    this.backgroundLayer = game.add.group();
 
-    this.background = this.game.add.tileSprite(0, 0, this.game.stage.bounds.width, this.game.stage.bounds.height, 'background');
+    this.background = game.add.tileSprite(0, 0, game.stage.bounds.width, game.stage.bounds.height, 'background');
 
     this.backgroundLayer.add(this.background);
 
     // Create the nebula
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 6; i++) {
       this.backgroundLayer.add(this.createNebula() );
     }
 
     // Show player lives
-    for (i = 0; i < this.game.uiState.lives; i++) {
-      this.lifeSprite = this.game.add.sprite(5 + i*20, 5, 'life');
-      this.lifeSprite.alpha = 0.7
+    for (i = 0; i < game.uiState.lives; i++) {
+      this.lifeSprite = game.add.sprite(5 + i*20, 5, 'life');
+      this.lifeSprite.alpha = 0.7;
     }
 
     // Init keyboard
@@ -181,12 +179,12 @@ Play.prototype = {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     // Init group for stars
-    this.starLayer = this.game.add.group();
+    this.starLayer = game.add.group();
     this.starLayer.x = 500;
     this.starLayer.y = 350;
 
     // Init group for stars
-    this.goalLayer = this.game.add.group();
+    this.goalLayer = game.add.group();
     this.goalLayer.x = 500;
     this.goalLayer.y = 350;
 
@@ -205,7 +203,7 @@ Play.prototype = {
     this.goalLayer.add(this.goal = this.createGoal(difficulty[3]) );
 
     // Create the player ship
-    this.player = this.createPlayer( this.game.world.centerX, this.game.world.centerY );
+    this.player = this.createPlayer( game.world.centerX, this.game.world.centerY );
   },
 
   update: function() {
@@ -265,7 +263,7 @@ Play.prototype = {
     this.stateText.anchor.setTo(0.5, 0.5);
     this.game.uiState.multiplier++;
     this.game.uiState.score += 1000;
-    this.game.time.events.add(Phaser.Timer.SECOND * 3, this.restart, this);
+    this.game.time.events.add(Phaser.Timer.SECOND * 2, this.restart, this);
   },
 
   restart: function() {
@@ -326,6 +324,7 @@ Play.prototype = {
   createNebula: function(){
     var newNebula = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'nebula' + this.game.rnd.integerInRange(1, 3));
     this.game.physics.enable(newNebula, Phaser.Physics.ARCADE);
+    newNebula.anchor.set(0.5);
     newNebula.alpha = 0.3;
     newNebula.body.enable;
     newNebula.body.angularVelocity = this.game.rnd.integerInRange(-2, 2);
@@ -334,7 +333,8 @@ Play.prototype = {
   },
 
   createStar: function(newStarX, newStarY, newStarSize){
-    var starImage = 'star14';
+    var newStar = null,
+    starImage = 'star14';
     if(newStarSize === 'small') {
       starImage = 'star14';
     } else if (newStarSize === 'medium') {
@@ -343,7 +343,7 @@ Play.prototype = {
       starImage = 'star64';
     }
 
-    var newStar = this.game.add.sprite(newStarX, newStarY, starImage);
+    newStar = this.game.add.sprite(newStarX, newStarY, starImage);
     this.game.physics.enable(newStar, Phaser.Physics.ARCADE);
     newStar.body.enable;
     newStar.body.immovable = true;
@@ -392,20 +392,20 @@ Preload.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
     this.load.image('logo', 'assets/logo.png');
-    this.load.image('star14', 'assets/star-14.png');
-    this.load.image('star32', 'assets/star-32.png');
-    this.load.image('star64', 'assets/star-64.png');
-    this.load.image('ship', 'assets/ship.png');
-    this.load.image('goal', 'assets/earth-64.png');
-    this.load.image('button', 'assets/button.png');
     this.load.image('background', 'assets/background.png');
+    this.load.image('button', 'assets/button.png');
     this.load.image('nebula1', 'assets/nebula1.png');
     this.load.image('nebula2', 'assets/nebula2.png');
     this.load.image('nebula3', 'assets/nebula3.png');
+    this.load.image('ship', 'assets/ship.png');
+    this.load.image('star14', 'assets/star-14.png');
+    this.load.image('star32', 'assets/star-32.png');
+    this.load.image('star64', 'assets/star-64.png');
+    this.load.image('goal', 'assets/earth-64.png');
+    this.load.image('life', 'assets/life.png');
     this.load.image('win', 'assets/win.png');
     this.load.image('lose', 'assets/lose.png');
     this.load.image('gameover', 'assets/gameover.png');
-    this.load.image('life', 'assets/life.png');
   },
   create: function() {
     this.asset.cropEnabled = false;
