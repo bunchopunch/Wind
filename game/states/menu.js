@@ -44,20 +44,20 @@ Menu.prototype = {
 
   },
 
-  startButton: function (game, uiLayer, ship) {
+  startButton: function () {
     var menuOutro = this.game.add.tween(this.uiLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
     var shipOutro = this.game.add.tween(this.ship).to({x: 1030}, 1000, Phaser.Easing.Linear.NONE, false);
     var backgroundOutro = this.game.add.tween(this.backgroundLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
+    var startGame = function() {
+      this.game.state.start('play');
+    };
 
     // Chain the tweens we just set up
     menuOutro.chain(shipOutro);
     shipOutro.chain(backgroundOutro);
     menuOutro.start();
 
-    backgroundOutro.onComplete.add(function(){
-      console.log(this);
-      this.game.state.start('play')}
-    );
+    backgroundOutro.onComplete.add(startGame, this);
   },
 
   update: function() {
