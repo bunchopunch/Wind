@@ -97,14 +97,13 @@ Menu.prototype = {
     }
 
     // Text styles
-    var headerStyle = { font: '65px Arial', fill: '#ffffff', align: 'center'};
     var subheaderStyle = { font: '24px Arial', fill: '#ffffff', align: 'center'};
     var buttonStyle = { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'};
 
     // Build the main UI elements
     this.logo = this.game.add.sprite(this.game.world.centerX, 265, 'logo');
     this.instructionsText = this.game.add.text(this.game.world.centerX, 365, 'Find the planet. Dodge the stars.', subheaderStyle);
-    this.startButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.startButton, this);
+    this.startButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.startHandler, this);
     this.buttonText = this.game.add.text(this.game.world.centerX, 450, 'START', buttonStyle);
 
     this.logo.anchor.setTo(0.5, 0.5);
@@ -124,7 +123,7 @@ Menu.prototype = {
     this.ship.anchor.setTo(0.5, 0.5);
   },
 
-  startButton: function () {
+  startHandler: function () {
     var menuOutro = this.game.add.tween(this.uiLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
     var shipOutro = this.game.add.tween(this.ship).to({x: 1030}, 1000, Phaser.Easing.Linear.NONE, false);
     var backgroundOutro = this.game.add.tween(this.backgroundLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
@@ -169,7 +168,6 @@ Play.prototype = {
     }
   },
   textStyles: {
-    header: { font: '65px Arial', fill: '#ffffff', align: 'center'},
     subheader: { font: '24px Arial', fill: '#ffffff', align: 'center'},
     button: { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'}
   },
@@ -197,6 +195,12 @@ Play.prototype = {
     // Create the nebula
     for (i = 0; i < 8; i++) {
       this.backgroundLayer.add(this.createNebula() );
+    }
+
+    // Show player lives
+    for (i = 0; i < this.game.uiState.lives; i++) {
+      this.lifeSprite = this.game.add.sprite(5 + i*20, 5, 'life');
+      this.lifeSprite.alpha = 0.7
     }
 
     // Init keyboard
@@ -255,14 +259,12 @@ Play.prototype = {
     }
 
     this.screenWrap(this.player);
-
-//      this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON); The board is too small for camera lockon
-//      this.game.camera.focusOnXY(this.player.x, this.player.y + this.player.height - this.camera.view.halfHeight);
   },
 
   // COLLISION HANDLERS
 
   deathHandler: function(){
+    this.player.body.angularVelocity = 200;
     this.game.uiState.menu = true;
     // Game Over
     if (this.game.uiState.lives <= 0){
@@ -286,6 +288,7 @@ Play.prototype = {
 
   // Won a level
   winHandler: function(){
+    this.player.body.velocity = 0;
     this.game.uiState.menu = true;
     this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'win');
     this.stateText.anchor.setTo(0.5, 0.5);
@@ -430,7 +433,8 @@ Preload.prototype = {
     this.load.image('nebula3', 'assets/nebula3.png');
     this.load.image('win', 'assets/win.png');
     this.load.image('lose', 'assets/lose.png');
-    this.load.image('gameover', 'assets/gameover.png');    
+    this.load.image('gameover', 'assets/gameover.png');
+    this.load.image('life', 'assets/life.png');
   },
   create: function() {
     this.asset.cropEnabled = false;

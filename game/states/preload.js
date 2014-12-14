@@ -25,7 +25,8 @@ Preload.prototype = {
     this.load.image('nebula3', 'assets/nebula3.png');
     this.load.image('win', 'assets/win.png');
     this.load.image('lose', 'assets/lose.png');
-    this.load.image('gameover', 'assets/gameover.png');    
+    this.load.image('gameover', 'assets/gameover.png');
+    this.load.image('life', 'assets/life.png');
   },
   create: function() {
     this.asset.cropEnabled = false;

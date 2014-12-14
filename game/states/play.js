@@ -9,7 +9,6 @@ Play.prototype = {
     }
   },
   textStyles: {
-    header: { font: '65px Arial', fill: '#ffffff', align: 'center'},
     subheader: { font: '24px Arial', fill: '#ffffff', align: 'center'},
     button: { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'}
   },
@@ -37,6 +36,12 @@ Play.prototype = {
     // Create the nebula
     for (i = 0; i < 8; i++) {
       this.backgroundLayer.add(this.createNebula() );
+    }
+
+    // Show player lives
+    for (i = 0; i < this.game.uiState.lives; i++) {
+      this.lifeSprite = this.game.add.sprite(5 + i*20, 5, 'life');
+      this.lifeSprite.alpha = 0.7
     }
 
     // Init keyboard
@@ -95,14 +100,12 @@ Play.prototype = {
     }
 
     this.screenWrap(this.player);
-
-//      this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON); The board is too small for camera lockon
-//      this.game.camera.focusOnXY(this.player.x, this.player.y + this.player.height - this.camera.view.halfHeight);
   },
 
   // COLLISION HANDLERS
 
   deathHandler: function(){
+    this.player.body.angularVelocity = 200;
     this.game.uiState.menu = true;
     // Game Over
     if (this.game.uiState.lives <= 0){
@@ -126,6 +129,7 @@ Play.prototype = {
 
   // Won a level
   winHandler: function(){
+    this.player.body.velocity = 0;
     this.game.uiState.menu = true;
     this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'win');
     this.stateText.anchor.setTo(0.5, 0.5);

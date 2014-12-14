@@ -19,14 +19,13 @@ Menu.prototype = {
     }
 
     // Text styles
-    var headerStyle = { font: '65px Arial', fill: '#ffffff', align: 'center'};
     var subheaderStyle = { font: '24px Arial', fill: '#ffffff', align: 'center'};
     var buttonStyle = { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'};
 
     // Build the main UI elements
     this.logo = this.game.add.sprite(this.game.world.centerX, 265, 'logo');
     this.instructionsText = this.game.add.text(this.game.world.centerX, 365, 'Find the planet. Dodge the stars.', subheaderStyle);
-    this.startButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.startButton, this);
+    this.startButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.startHandler, this);
     this.buttonText = this.game.add.text(this.game.world.centerX, 450, 'START', buttonStyle);
 
     this.logo.anchor.setTo(0.5, 0.5);
@@ -46,7 +45,7 @@ Menu.prototype = {
     this.ship.anchor.setTo(0.5, 0.5);
   },
 
-  startButton: function () {
+  startHandler: function () {
     var menuOutro = this.game.add.tween(this.uiLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
     var shipOutro = this.game.add.tween(this.ship).to({x: 1030}, 1000, Phaser.Easing.Linear.NONE, false);
     var backgroundOutro = this.game.add.tween(this.backgroundLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
