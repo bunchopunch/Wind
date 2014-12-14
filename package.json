@@ -1,5 +1,13 @@
 {
-  "name": "watergame",
+  "name": "StellarWind",
+  "version": "1.0.0",
+  "description": "An arcade style game build in Phaser JS.",
+  "license": "MIT",
+  "author": "Bunchopunch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bunchopunch/Wind"
+  },
   "private": true,
   "devDependencies": {
     "grunt": "~0.4.1",
