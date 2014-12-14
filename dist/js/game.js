@@ -123,15 +123,16 @@ Menu.prototype = {
   },
 
   startButton: function (game, uiLayer, ship) {
-//    var shipOutro = this.game.add.tween(this.ship).to({x: 1030}, 1000, Phaser.Easing.Linear.NONE, false);
-//    var menuOutro = this.game.add.tween(this.uiLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
-//    var backgroundOutro = this.game.add.tween(this.background).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
+    var menuOutro = this.game.add.tween(this.uiLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
+    var shipOutro = this.game.add.tween(this.ship).to({x: 1030}, 1000, Phaser.Easing.Linear.NONE, false);
+    var backgroundOutro = this.game.add.tween(this.backgroundLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
 //
-//    shipOutro.chain(menuOutro);
-//    shipOutro.chain(backgroundOutro);
+    menuOutro.chain(shipOutro);
+    shipOutro.chain(backgroundOutro);
+    menuOutro.start();
 
 //    console.log(this.ship)
-    this.game.state.start('play');
+//    this.game.state.start('play');
   },
 
   update: function() {
@@ -140,10 +141,8 @@ Menu.prototype = {
 
   createNebula: function(){
     var newNebula = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'nebula' + this.game.rnd.integerInRange(1, 3));
-
     this.game.physics.enable(newNebula, Phaser.Physics.ARCADE);
     newNebula.alpha = 0.5;
-
     newNebula.body.enable;
     newNebula.body.angularVelocity = this.game.rnd.integerInRange(-2, 2);
 
@@ -323,7 +322,7 @@ Play.prototype = {
   createNebula: function(){
     var newNebula = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'nebula' + this.game.rnd.integerInRange(1, 3));
     this.game.physics.enable(newNebula, Phaser.Physics.ARCADE);
-    newNebula.alpha = 0.5;
+    newNebula.alpha = 0.3;
     newNebula.body.enable;
     newNebula.body.angularVelocity = this.game.rnd.integerInRange(-2, 2);
 

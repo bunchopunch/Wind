@@ -167,7 +167,7 @@ Play.prototype = {
   createNebula: function(){
     var newNebula = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'nebula' + this.game.rnd.integerInRange(1, 3));
     this.game.physics.enable(newNebula, Phaser.Physics.ARCADE);
-    newNebula.alpha = 0.5;
+    newNebula.alpha = 0.3;
     newNebula.body.enable;
     newNebula.body.angularVelocity = this.game.rnd.integerInRange(-2, 2);
 
