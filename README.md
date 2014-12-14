@@ -16,6 +16,6 @@ Stellar Wind is playable on [this projects GitHub page](http://bunchopunch.githu
 If you would like to play with the source code for Stellar wind, you will need to have Node JS installed. Simply clone this git repository to your system and run `npm install`. Once that is complete, you can start a LiveReload task by running `grunt serve`.
 
 # Licence
-- This code was scaffolded with the PhaserJS Yo generator.
+- This code was scaffolded with the [Offical PhaserJS Yo generator](https://github.com/codevinsky/generator-phaser-official), 
 - Any of code or assets I've created for this project are distributed under an MIT license.
 - The Vyper Falcon Truetype font used for logos is copyright 2008 Iconian Fonts and not licensed for commercial use.
