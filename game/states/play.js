@@ -19,6 +19,8 @@
       var difficulty = [5, 3, 1];
       console.log(game.uiState);
 
+      this.background = this.game.add.tileSprite(0, 0, 1000, 750, "background");
+
       // Init keyboard
       this.playerCursorKeys = game.input.keyboard.createCursorKeys();
 

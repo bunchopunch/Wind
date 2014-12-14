@@ -20,6 +20,9 @@ Preload.prototype = {
     this.load.image('goal', 'assets/earth-64.png');
     this.load.image('button', 'assets/button.png');
     this.load.image('background', 'assets/background.png');
+    this.load.image('nebula1', 'assets/nebula1.png');
+    this.load.image('nebula2', 'assets/nebula2.png');
+    this.load.image('nebula3', 'assets/nebula3.png');
   },
   create: function() {
     this.asset.cropEnabled = false;
