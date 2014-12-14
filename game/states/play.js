@@ -51,13 +51,13 @@ Play.prototype = {
 
     // Create the stars
     for (i = 0; i < (difficulty[0] * this.multiplier() ); i++) {
-      this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'small'));
+      this.starLayer.add(this.createStar(this.rndLayerPos('x', 16), this.rndLayerPos('y', 16), 'small'));
     }
     for (i = 0; i < difficulty[1] * this.multiplier() ; i++) {
-      this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'medium'));
+      this.starLayer.add(this.createStar(this.rndLayerPos('x', 32), this.rndLayerPos('y', 32), 'medium'));
     }
     for (i = 0; i < difficulty[2] * this.multiplier() ; i++) {
-      this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'large'));
+      this.starLayer.add(this.createStar(this.rndLayerPos('x', 64), this.rndLayerPos('y', 64), 'large'));
     }
 
     // Create a goal object
@@ -121,6 +121,8 @@ Play.prototype = {
     this.game.state.start('play');
   },
 
+  // OTHER EVENT HANDLERS
+
   screenWrap: function (sprite) {
     if (sprite.x < 0) {
         sprite.x = this.game.width;
@@ -135,14 +137,33 @@ Play.prototype = {
     }
   },
 
-  rndLayerPos: function(axis){
+  // GAME OBJECT FACTORIES
+
+  rndLayerPos: function(axis, buffer){
+    var randomPos = null;
     if (axis === 'x') {
-      return this.game.world.randomX - this.game.world.width/2;
+      randomPos = this.game.world.randomX - this.game.world.width/2;
+      // Be sure the coords have allowed for the specified buffer
+      if (randomPos <= this.game.world.width/2 * -1 + buffer){
+        randomPos = this.game.world.width/2 * -1 + 0;
+      } else if (randomPos >= this.game.world.width/2 - buffer) {
+        randomPos = this.game.world.width/2 * -1 + buffer;      
+      }
+
     } else if (axis === 'y') {
-      return this.game.world.randomY - this.game.world.height/2;
+
+      randomPos = this.game.world.randomY - this.game.world.height/2;
+      if (randomPos <= this.game.world.height/2 * -1 + buffer){
+        randomPos = this.game.world.height/2 * -1 + 0;
+      } else if (randomPos >= this.game.world.height/2 - buffer) {
+        randomPos = this.game.world.height/2 * -1 + buffer;      
+      }
+
     } else {
-      return 0;
+      randomPos = 0;
     }
+
+    return randomPos;
   },
 
   createNebula: function(){
@@ -174,7 +195,7 @@ Play.prototype = {
   },
 
   createGoal: function(){
-    var newGoal = this.game.add.sprite(this.rndLayerPos('x'), this.rndLayerPos('y'), 'goal');
+    var newGoal = this.game.add.sprite(this.rndLayerPos('x', 64), this.rndLayerPos('y', 64), 'goal');
     this.game.physics.enable(newGoal, Phaser.Physics.ARCADE);
 
     newGoal.body.enable;
