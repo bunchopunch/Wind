@@ -54,7 +54,10 @@ Menu.prototype = {
     shipOutro.chain(backgroundOutro);
     menuOutro.start();
 
-    menuOutro._lastChild.onComplete(this.game.state.start('play') );
+    backgroundOutro.onComplete.add(function(){
+      console.log(this);
+      this.game.state.start('play')}
+    );
   },
 
   update: function() {

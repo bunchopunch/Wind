@@ -18,19 +18,19 @@ Play.prototype = {
     var difficulty = [5, 3, 1];
     console.log(game.uiState);
 
-    this.background = this.game.add.tileSprite(0, 0, 1000, 750, "background");
+    this.background = this.game.add.tileSprite(0, 0, 1000, 750, 'background');
 
     // Create a layer for the Background
     this.backgroundLayer = this.game.add.group();
 
-    this.background = this.game.add.tileSprite(0, 0, this.game.stage.bounds.width, this.game.stage.bounds.height, "background");
+    this.background = this.game.add.tileSprite(0, 0, this.game.stage.bounds.width, this.game.stage.bounds.height, 'background');
 
     this.backgroundLayer.add(this.background);
 
     // Create the nebula
     for (var i = 0; i < 8; i++) {
       this.backgroundLayer.add(this.createNebula() );
-    };
+    }
 
     // Init keyboard
     this.playerCursorKeys = game.input.keyboard.createCursorKeys();
@@ -51,13 +51,13 @@ Play.prototype = {
     // Create the stars
     for (var i = 0; i < (difficulty[0] * this.multiplier() ); i++) {
       this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'small'));
-    };
+    }
     for (var i = 0; i < difficulty[1] * this.multiplier() ; i++) {
       this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'medium'));
-    };
+    }
     for (var i = 0; i < difficulty[2] * this.multiplier() ; i++) {
       this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'large'));
-    };
+    }
 
     // Create a goal object
     this.goalLayer.add(this.goal = this.createGoal(difficulty[3]) );
@@ -73,7 +73,7 @@ Play.prototype = {
     if (this.playerCursorKeys.up.isDown) {
       this.game.physics.arcade.accelerationFromRotation(this.player.rotation, 200, this.player.body.acceleration);
     } else {
-      this.player.body.acceleration.set(0)
+      this.player.body.acceleration.set(0);
     }
 
     if (this.playerCursorKeys.left.isDown) {
