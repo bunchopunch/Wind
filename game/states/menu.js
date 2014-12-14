@@ -19,7 +19,7 @@ Menu.prototype = {
 
     this.backgroundLayer.add(this.background);
 
-    // Create the stars
+    // Create the nebula
     for (var i = 0; i < 8; i++) {
       this.backgroundLayer.add(this.createNebula() );
     };
@@ -46,16 +46,15 @@ Menu.prototype = {
   },
 
   startButton: function (game, uiLayer, ship) {
-    var shipOutro = this.game.add.tween(this.ship).to({x: 1030}, 1000, Phaser.Easing.Linear.NONE, false);
-    var menuOutro = this.game.add.tween(this.uiLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
-    var backgroundOutro = this.game.add.tween(this.background).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
-
-
-    shipOutro.chain(menuOutro);
-    shipOutro.chain(backgroundOutro);
+//    var shipOutro = this.game.add.tween(this.ship).to({x: 1030}, 1000, Phaser.Easing.Linear.NONE, false);
+//    var menuOutro = this.game.add.tween(this.uiLayer).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
+//    var backgroundOutro = this.game.add.tween(this.background).to({alpha: 0}, 1000, Phaser.Easing.Linear.NONE, false);
+//
+//    shipOutro.chain(menuOutro);
+//    shipOutro.chain(backgroundOutro);
 
 //    console.log(this.ship)
-//    this.game.state.start('play');
+    this.game.state.start('play');
   },
 
   update: function() {
