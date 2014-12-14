@@ -82,18 +82,18 @@ Menu.prototype = {
   ship: null,
   uiLayer: null,
   create: function() {
-    var game = this.game;
+    var i = 0;
 
     // Create a layer for the Background
     this.backgroundLayer = this.game.add.group();
 
-    this.background = this.game.add.tileSprite(0, 0, this.game.stage.bounds.width, this.game.stage.bounds.height, "background");
+    this.background = this.game.add.tileSprite(0, 0, this.game.stage.bounds.width, this.game.stage.bounds.height, 'background');
     this.backgroundLayer.add(this.background);
 
     // Create the nebula
-    for (var i = 0; i < 8; i++) {
+    for (i = 0; i < 8; i++) {
       this.backgroundLayer.add(this.createNebula());
-    };
+    }
 
     // Text styles
     var titleStyle = { font: '65px Arial', fill: '#ffffff', align: 'center'};
@@ -172,6 +172,7 @@ Play.prototype = {
   goal: null,
   create: function() {
     var game = this.game;
+    var i = 0;
     var difficulty = [5, 3, 1];
     console.log(game.uiState);
 
@@ -185,7 +186,7 @@ Play.prototype = {
     this.backgroundLayer.add(this.background);
 
     // Create the nebula
-    for (var i = 0; i < 8; i++) {
+    for (i = 0; i < 8; i++) {
       this.backgroundLayer.add(this.createNebula() );
     }
 
@@ -206,13 +207,13 @@ Play.prototype = {
     this.goalLayer.y = 350;
 
     // Create the stars
-    for (var i = 0; i < (difficulty[0] * this.multiplier() ); i++) {
+    for (i = 0; i < (difficulty[0] * this.multiplier() ); i++) {
       this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'small'));
     }
-    for (var i = 0; i < difficulty[1] * this.multiplier() ; i++) {
+    for (i = 0; i < difficulty[1] * this.multiplier() ; i++) {
       this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'medium'));
     }
-    for (var i = 0; i < difficulty[2] * this.multiplier() ; i++) {
+    for (i = 0; i < difficulty[2] * this.multiplier() ; i++) {
       this.starLayer.add(this.createStar(this.rndLayerPos('x'), this.rndLayerPos('y'), 'large'));
     }
 
@@ -243,8 +244,7 @@ Play.prototype = {
 
     this.screenWrap(this.player);
 
-      this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON)
-
+//      this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON); The board is too small for camera lockon
 //      this.game.camera.focusOnXY(this.player.x, this.player.y + this.player.height - this.camera.view.halfHeight);
 
   },
@@ -302,6 +302,16 @@ Play.prototype = {
     }
   },
 
+  createNebula: function(){
+    var newNebula = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'nebula' + this.game.rnd.integerInRange(1, 3));
+    this.game.physics.enable(newNebula, Phaser.Physics.ARCADE);
+    newNebula.alpha = 0.3;
+    newNebula.body.enable;
+    newNebula.body.angularVelocity = this.game.rnd.integerInRange(-2, 2);
+
+    return newNebula;
+  },
+
   createStar: function(newStarX, newStarY, newStarSize){
     var starImage = 'star14';
     if(newStarSize === 'small') {
@@ -320,17 +330,7 @@ Play.prototype = {
     return newStar;
   },
 
-  createNebula: function(){
-    var newNebula = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'nebula' + this.game.rnd.integerInRange(1, 3));
-    this.game.physics.enable(newNebula, Phaser.Physics.ARCADE);
-    newNebula.alpha = 0.3;
-    newNebula.body.enable;
-    newNebula.body.angularVelocity = this.game.rnd.integerInRange(-2, 2);
-
-    return newNebula;
-  },
-
-  createGoal: function(minDistance){
+  createGoal: function(){
     var newGoal = this.game.add.sprite(this.rndLayerPos('x'), this.rndLayerPos('y'), 'goal');
     this.game.physics.enable(newGoal, Phaser.Physics.ARCADE);
 
@@ -351,11 +351,6 @@ Play.prototype = {
 
     return newPlayer;
   },
-
-  // OLD
-//    clickListener: function() {
-//      this.game.state.start('gameover');
-//    }
 };
 
 module.exports = Play;

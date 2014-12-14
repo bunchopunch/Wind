@@ -5,18 +5,18 @@ Menu.prototype = {
   ship: null,
   uiLayer: null,
   create: function() {
-    var game = this.game;
+    var i = 0;
 
     // Create a layer for the Background
     this.backgroundLayer = this.game.add.group();
 
-    this.background = this.game.add.tileSprite(0, 0, this.game.stage.bounds.width, this.game.stage.bounds.height, "background");
+    this.background = this.game.add.tileSprite(0, 0, this.game.stage.bounds.width, this.game.stage.bounds.height, 'background');
     this.backgroundLayer.add(this.background);
 
     // Create the nebula
-    for (var i = 0; i < 8; i++) {
+    for (i = 0; i < 8; i++) {
       this.backgroundLayer.add(this.createNebula());
-    };
+    }
 
     // Text styles
     var titleStyle = { font: '65px Arial', fill: '#ffffff', align: 'center'};
