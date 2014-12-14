@@ -24,7 +24,7 @@ Preload.prototype = {
     this.load.image('nebula2', 'assets/nebula2.png');
     this.load.image('nebula3', 'assets/nebula3.png');
     this.load.image('win', 'assets/win.png');
-    this.load.image('loose', 'assets/loose.png');
+    this.load.image('lose', 'assets/lose.png');
     this.load.image('gameover', 'assets/gameover.png');    
   },
   create: function() {

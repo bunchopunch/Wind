@@ -288,7 +288,7 @@ Play.prototype = {
 
     // Lost a level
     } else {
-      this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'loose');
+      this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'lose');
       this.stateText.anchor.setTo(0.5, 0.5);
 //      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', this.textStyles.header);
 //      this.titleText.anchor.setTo(0.5, 0.5);
@@ -433,7 +433,7 @@ Preload.prototype = {
     this.load.image('nebula2', 'assets/nebula2.png');
     this.load.image('nebula3', 'assets/nebula3.png');
     this.load.image('win', 'assets/win.png');
-    this.load.image('loose', 'assets/loose.png');
+    this.load.image('lose', 'assets/lose.png');
     this.load.image('gameover', 'assets/gameover.png');    
   },
   create: function() {

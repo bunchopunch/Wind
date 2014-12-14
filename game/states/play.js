@@ -128,7 +128,7 @@ Play.prototype = {
 
     // Lost a level
     } else {
-      this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'loose');
+      this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'lose');
       this.stateText.anchor.setTo(0.5, 0.5);
 //      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', this.textStyles.header);
 //      this.titleText.anchor.setTo(0.5, 0.5);
