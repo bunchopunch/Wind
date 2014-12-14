@@ -24,21 +24,21 @@ Menu.prototype = {
     var buttonStyle = { font: '35px Arial', fill: '#ffffff', align: 'center', cursor: 'pointer'};
 
     // Build the main UI elements
-//    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'A Wind to Shake the Stars', headerStyle);
-//    this.titleText.anchor.setTo(0.5, 0.5);
-    this.logo = this.game.add.sprite(this.game.world.centerX, 300, 'logo');
-    this.instructionsText = this.game.add.text(this.game.world.centerX, 410, 'Find the planet. Dodge the stars.', subheaderStyle);
-    this.button = this.game.add.button(this.game.world.centerX - 198, 450, 'button', this.startButton, this);
-    this.buttonText = this.game.add.text(this.game.world.centerX - 60, 485, 'START', buttonStyle);
+    this.logo = this.game.add.sprite(this.game.world.centerX, 265, 'logo');
+    this.instructionsText = this.game.add.text(this.game.world.centerX, 365, 'Find the planet. Dodge the stars.', subheaderStyle);
+    this.startButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.startButton, this);
+    this.buttonText = this.game.add.text(this.game.world.centerX, 450, 'START', buttonStyle);
 
     this.logo.anchor.setTo(0.5, 0.5);
     this.instructionsText.anchor.setTo(0.5, 0.5);
+    this.startButton.anchor.setTo(0.5, 0.5);
+    this.buttonText.anchor.setTo(0.5, 0.5);
 
     // Create a layer for the UI
     this.uiLayer = this.game.add.group();
     this.uiLayer.add(this.logo);
     this.uiLayer.add(this.instructionsText);
-    this.uiLayer.add(this.button);
+    this.uiLayer.add(this.startButton);
     this.uiLayer.add(this.buttonText);
 
     // create the ship
