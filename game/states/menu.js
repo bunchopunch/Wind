@@ -44,7 +44,6 @@ Menu.prototype = {
     // create the ship
     this.ship = this.game.add.sprite(-45, 500, 'ship');
     this.ship.anchor.setTo(0.5, 0.5);
-
   },
 
   startButton: function () {

@@ -22,6 +22,7 @@ Play.prototype = {
     var game = this.game;
     var i = 0;
     var difficulty = [5, 3, 1];
+    game.uiState.menu = false;
     console.log(game.uiState);
 
     this.background = this.game.add.tileSprite(0, 0, 1000, 750, 'background');
@@ -73,31 +74,65 @@ Play.prototype = {
   },
 
   update: function() {
-    this.game.physics.arcade.collide(this.player, this.starLayer, this.deathHandler, null, this);
-    this.game.physics.arcade.collide(this.player, this.goal, this.winHandler, null, this);
 
-    if (this.playerCursorKeys.up.isDown) {
-      this.game.physics.arcade.accelerationFromRotation(this.player.rotation, 200, this.player.body.acceleration);
-    } else {
-      this.player.body.acceleration.set(0);
-    }
+    if (this.game.uiState.menu === false) {
+      this.game.physics.arcade.collide(this.player, this.starLayer, this.deathHandler, null, this);
+      this.game.physics.arcade.collide(this.player, this.goal, this.winHandler, null, this);
 
-    if (this.playerCursorKeys.left.isDown) {
+      if (this.playerCursorKeys.up.isDown) {
+        this.game.physics.arcade.accelerationFromRotation(this.player.rotation, 200, this.player.body.acceleration);
+      } else {
+        this.player.body.acceleration.set(0);
+      }
+
+      if (this.playerCursorKeys.left.isDown) {
         this.player.body.angularVelocity = -200;
-    } else if (this.playerCursorKeys.right.isDown) {
+      } else if (this.playerCursorKeys.right.isDown) {
         this.player.body.angularVelocity = 200;
-    } else {
-      this.player.body.angularVelocity = 0;
+      } else {
+        this.player.body.angularVelocity = 0;
+      }
     }
 
     this.screenWrap(this.player);
 
 //      this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON); The board is too small for camera lockon
 //      this.game.camera.focusOnXY(this.player.x, this.player.y + this.player.height - this.camera.view.halfHeight);
-
   },
 
   // COLLISION HANDLERS
+
+  deathHandler: function(){
+    this.game.uiState.menu = true;
+    // Game Over
+    if (this.game.uiState.lives <= 0){
+      this.stateText = this.game.add.sprite(this.game.world.centerX, 250, 'gameover');
+      this.scoreText = this.game.add.text(this.game.world.centerX, 355, 'YOUR SCORE: ' + this.game.uiState.score, this.textStyles.subheader);
+      this.restartButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.hardRestart, this);
+      this.buttonText = this.game.add.text(this.game.world.centerX, 450, 'RESTART', this.textStyles.button);
+      this.stateText.anchor.setTo(0.5, 0.5);
+      this.scoreText.anchor.setTo(0.5, 0.5);
+      this.restartButton.anchor.setTo(0.5, 0.5);
+      this.buttonText.anchor.setTo(0.5, 0.5);
+
+    // Lost a level
+    } else {
+      this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'lose');
+      this.stateText.anchor.setTo(0.5, 0.5);
+      this.game.uiState.lives--;
+      this.game.time.events.add(Phaser.Timer.SECOND * 2, this.restart, this);
+    }
+  },
+
+  // Won a level
+  winHandler: function(){
+    this.game.uiState.menu = true;
+    this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'win');
+    this.stateText.anchor.setTo(0.5, 0.5);
+    this.game.uiState.multiplier++;
+    this.game.uiState.score += 1000;
+    this.game.time.events.add(Phaser.Timer.SECOND * 3, this.restart, this);
+  },
 
   restart: function() {
     this.game.state.start('play');
@@ -111,42 +146,6 @@ Play.prototype = {
     this.game.state.start('play');
   },
 
-  deathHandler: function(){
-    // Game Over
-    if (this.game.uiState.lives <= 0){
-      this.stateText = this.game.add.sprite(this.game.world.centerX, 250, 'gameover');
-//      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'GAME OVERED', this.textStyles.header);
-      this.scoreText = this.game.add.text(this.game.world.centerX, 355, 'YOUR SCORE: ' + this.game.uiState.score, this.textStyles.subheader);
-      this.restartButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.hardRestart, this);
-      this.buttonText = this.game.add.text(this.game.world.centerX, 450, 'RESTART', this.textStyles.button);
-      this.stateText.anchor.setTo(0.5, 0.5);
-//      this.titleText.anchor.setTo(0.5, 0.5);
-      this.scoreText.anchor.setTo(0.5, 0.5);
-      this.restartButton.anchor.setTo(0.5, 0.5);
-      this.buttonText.anchor.setTo(0.5, 0.5);
-
-
-    // Lost a level
-    } else {
-      this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'lose');
-      this.stateText.anchor.setTo(0.5, 0.5);
-//      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', this.textStyles.header);
-//      this.titleText.anchor.setTo(0.5, 0.5);
-      this.game.uiState.lives--;
-      this.game.time.events.add(Phaser.Timer.SECOND * 2, this.restart, this);
-    }
-  },
-
-  // Won a level
-  winHandler: function(){
-    this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'win');
-    this.stateText.anchor.setTo(0.5, 0.5);
-//    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', this.textStyles.header);
-//    this.titleText.anchor.setTo(0.5, 0.5);
-    this.game.uiState.multiplier++;
-    this.game.uiState.score += 1000;
-    this.game.time.events.add(Phaser.Timer.SECOND * 3, this.restart, this);
-  },
 
   // OTHER EVENT HANDLERS
 
@@ -176,16 +175,13 @@ Play.prototype = {
       } else if (randomPos >= this.game.world.width/2 - buffer) {
         randomPos = this.game.world.width/2 * -1 + buffer;
       }
-
     } else if (axis === 'y') {
-
       randomPos = this.game.world.randomY - this.game.world.height/2;
       if (randomPos <= this.game.world.height/2 * -1 + buffer){
         randomPos = this.game.world.height/2 * -1 + 0;
       } else if (randomPos >= this.game.world.height/2 - buffer) {
         randomPos = this.game.world.height/2 * -1 + buffer;
       }
-
     } else {
       randomPos = 0;
     }

@@ -10,6 +10,7 @@ window.onload = function () {
   var game = new Phaser.Game(config.width, config.height, Phaser.AUTO, 'stars');
 
   game.uiState = {
+    menu: true,
     lives: 3,
     multiplier: 1,
     level: 1,
