@@ -114,12 +114,13 @@ Play.prototype = {
   deathHandler: function(){
     // Game Over
     if (this.game.uiState.lives <= 0){
-      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'GAME OVERED', this.textStyles.header);
-      this.scoreText = this.game.add.text(this.game.world.centerX, 370, 'YOUR SCORE: ' + this.game.uiState.score, this.textStyles.subheader);
+      this.stateText = this.game.add.sprite(this.game.world.centerX, 250, 'gameover');
+//      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'GAME OVERED', this.textStyles.header);
+      this.scoreText = this.game.add.text(this.game.world.centerX, 355, 'YOUR SCORE: ' + this.game.uiState.score, this.textStyles.subheader);
       this.restartButton = this.game.add.button(this.game.world.centerX, 450, 'button', this.hardRestart, this);
       this.buttonText = this.game.add.text(this.game.world.centerX, 450, 'RESTART', this.textStyles.button);
-
-      this.titleText.anchor.setTo(0.5, 0.5);
+      this.stateText.anchor.setTo(0.5, 0.5);
+//      this.titleText.anchor.setTo(0.5, 0.5);
       this.scoreText.anchor.setTo(0.5, 0.5);
       this.restartButton.anchor.setTo(0.5, 0.5);
       this.buttonText.anchor.setTo(0.5, 0.5);
@@ -127,8 +128,10 @@ Play.prototype = {
 
     // Lost a level
     } else {
-      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', this.textStyles.header);
-      this.titleText.anchor.setTo(0.5, 0.5);
+      this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'loose');
+      this.stateText.anchor.setTo(0.5, 0.5);
+//      this.titleText = this.game.add.text(this.game.world.centerX, 300, 'DEADED', this.textStyles.header);
+//      this.titleText.anchor.setTo(0.5, 0.5);
       this.game.uiState.lives--;
       this.game.time.events.add(Phaser.Timer.SECOND * 2, this.restart, this);
     }
@@ -136,8 +139,10 @@ Play.prototype = {
 
   // Won a level
   winHandler: function(){
-    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', this.textStyles.header);
-    this.titleText.anchor.setTo(0.5, 0.5);
+    this.stateText = this.game.add.sprite(this.game.world.centerX, 300, 'win');
+    this.stateText.anchor.setTo(0.5, 0.5);
+//    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'WINNED', this.textStyles.header);
+//    this.titleText.anchor.setTo(0.5, 0.5);
     this.game.uiState.multiplier++;
     this.game.uiState.score += 1000;
     this.game.time.events.add(Phaser.Timer.SECOND * 3, this.restart, this);
