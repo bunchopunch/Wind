@@ -6,7 +6,7 @@ Stellar Wind
 # Retrospective
 Well the Dare technically lasts for a weekend, due to other obligations my work was almost entirely done on Sunday. If you think starting at noon and finishing by the 8:00pm deadline is difficult, then you're right. That's why when the challenge was up, Stellar Wind could only be called a game in the most periapical sense. 
 
-All that said, the lessons learned during my first attempt at the dare (LD30: Brainspeaker) helped keep Stellar Wind manageable and realistic in scope. However, the end product has issues with frames being dropped—even on powerful machines. It may be helpful to add low and high video quality options or to simply investagate what optimizations can be made. Finally, this project reinforced in my mind that all weekend really is required to finish the challenge and that practice with Phaser is necessary, as it can be a bit quirkier than it first appeared.
+All that said, the lessons learned during my first attempt at the dare (LD30: Brainspeaker) helped keep Stellar Wind manageable and realistic in scope. However, the end product has issues with frames being dropped—even on powerful machines. It may be helpful to add low and high video quality options or to simply investigate what optimizations can be made. Finally, this project reinforced in my mind that all weekend really is required to finish the challenge and that practice with Phaser is necessary, as it can be a bit quirkier than it first appeared.
 
 On that last note, I've put a few more hours in and not only turned this project into a complete game, but also got some valuable experience with Phaser.
 
